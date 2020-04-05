@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textSizeEditText">10dip</dimen>
+    <dimen name="textSizeButtonText">7dip</dimen>
+</resources>

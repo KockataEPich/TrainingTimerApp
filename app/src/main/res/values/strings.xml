@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TrainingTimerApp</string>
+    <string name="list_header">My Workouts</string>
+</resources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="151dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="Rounds"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/add_round_button"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/baseline_add_box_black_48dp"
+                android:backgroundTint="#E4375EA3" />
+
+            <EditText
+                android:id="@+id/view_of_rounds"
+                android:layout_width="186dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/textinborder"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textColor="#E4AA0E0E"
+                android:textSize="@dimen/textSizeEditText" />
+
+            <Button
+                android:id="@+id/subtract_round_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/baseline_indeterminate_check_box_black_48dp"
+                android:backgroundTint="#E4375EA3"
+                android:onClick="subtractMinute" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkbox_TTS"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+
+
+                android:onClick="onCheckboxClicked"
+                android:text="TTS" />
+
+            <CheckBox
+                android:id="@+id/checkbox_ContinueWhenLocked"
+                android:layout_width="132dp"
+                android:layout_height="match_parent"
+                android:onClick="onCheckboxClicked"
+                android:text="Continue when screen locked" />
+
+            <CheckBox
+                android:id="@+id/checkbox_Vibrate"
+                android:layout_width="127dp"
+                android:layout_height="match_parent"
+                android:onClick="onCheckboxClicked"
+                android:text="VIbrate on timer start" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
