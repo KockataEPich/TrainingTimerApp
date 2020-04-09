@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/options"
+        android:icon="@drawable/ic_more_horiz_24dp"
+        android:title="Program Options"
+        ></item>
+
+    <item
+        android:id="@+id/play_button"
+        android:icon="@drawable/ic_play_arrow_24dp"
+        android:title="Start Program"
+        ></item>
+
+    <item
+        android:id="@+id/add_timer_button"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="Add Timer"
+        ></item>
+</menu>

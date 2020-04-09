@@ -418,7 +418,7 @@ public class MainActivity extends Activity
     }//OnActivityResult
 
 
-
+    //TODO make the bar not respond to typing
 
     // Method for updating the file which contains the the information about the workouts
     // and its timers.

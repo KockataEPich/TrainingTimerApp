@@ -12,8 +12,11 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -24,10 +27,14 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.internal.NavigationMenu;
 
 import java.security.cert.PKIXRevocationChecker;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 public class EditPage extends AppCompatActivity implements EditPageInformationExchangeListener {
 
@@ -45,6 +52,10 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
     boolean tts;
     boolean continueWhenLocked;
     boolean vibrate;
+
+    FloatingActionButton menuFab, playFab, addTimerFab, optionsFab, closeFab;
+    Animation fabOpen, fabClose, rotateForward, rotateBackward, fabOpenBig;
+    boolean isOpen = false;
 
     private EditPageInformationExchangeListener listener;
 
@@ -93,6 +104,55 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         vibrate = intent.getBooleanExtra("isVibrateOn", false);
 
 
+        menuFab = findViewById(R.id.edit_menu);
+        playFab = findViewById(R.id.play_button);
+        addTimerFab = findViewById(R.id.add_timer);
+        optionsFab = findViewById(R.id.options_button);
+        closeFab = findViewById(R.id.ex_close);
+
+        fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+        rotateForward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
+        rotateBackward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
+        fabOpenBig = AnimationUtils.loadAnimation(this, R.anim.fab_open_big);
+
+        menuFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateFab();
+            }
+        });
+
+        closeFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateFab();
+            }
+        });
+
+        playFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditPage.this, "play FAB CLICKED",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addTimerFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTimer();
+            }
+        });
+
+        optionsFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                options();
+            }
+        });
+
+
+
 
         //numberOfRounds = findViewById(R.id.number_of_rounds);
         //numberOfRounds.setText("" + intent.getIntExtra("numberOfRounds", 0));
@@ -120,6 +180,9 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
             }
         });
         */
+
+
+
 
 
         allLines = getAllLines();
@@ -156,6 +219,45 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
 
 
     }
+
+    private void animateFab()
+    {
+        if(isOpen)
+        {
+            closeFab.startAnimation(fabClose);
+            closeFab.setClickable(false);
+
+            menuFab.startAnimation(fabOpenBig);
+            menuFab.setClickable(true);
+
+
+            playFab.startAnimation(fabClose);
+            addTimerFab.startAnimation(fabClose);
+            optionsFab.startAnimation(fabClose);
+            playFab.setClickable(false);
+            addTimerFab.setClickable(false);
+            optionsFab.setClickable(false);
+            isOpen=false;
+        }//if
+        else
+        {
+            menuFab.startAnimation(fabClose);
+            menuFab.setClickable(false);
+
+            closeFab.startAnimation(fabOpenBig);
+            closeFab.setClickable(true);
+
+            playFab.startAnimation(fabOpen);
+            addTimerFab.startAnimation(fabOpen);
+            optionsFab.startAnimation(fabOpen);
+
+
+            playFab.setClickable(true);
+            addTimerFab.setClickable(true);
+            optionsFab.setClickable(true);
+            isOpen=true;
+        }//else
+    }//animateFab
 
     //TODO option to start the program
     @Override
@@ -213,7 +315,7 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         popUpForTimeSetter.show(getSupportFragmentManager(), "time setter dialogue");
     }
 
-    public void options(View view)
+    public void options()
     {
         OptionsDialogue optionsDialogue = new OptionsDialogue();
         optionsDialogue.currentRounds = numberOfRounds;
@@ -302,7 +404,7 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
     }
 
 
-    public void addTimer(View view)
+    public void addTimer()
     {
         LineWithNameAndTimer lineToAdd = new LineWithNameAndTimer();
 
