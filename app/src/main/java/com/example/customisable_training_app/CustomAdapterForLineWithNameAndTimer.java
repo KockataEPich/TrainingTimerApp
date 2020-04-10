@@ -46,6 +46,7 @@ public class CustomAdapterForLineWithNameAndTimer extends BaseAdapter
             holder = new ViewHolder();
             holder.txtNameOfTimer = (TextView) convertView.findViewById(R.id.name_of_timer);
             holder.actualTimerSeconds = (TextView) convertView.findViewById(R.id.the_timer_itself_seconds);
+            holder.sound = (TextView) convertView.findViewById(R.id.textView2);
             convertView.setTag(holder);
         }
         else
@@ -54,6 +55,30 @@ public class CustomAdapterForLineWithNameAndTimer extends BaseAdapter
         }
 
         holder.txtNameOfTimer.setText(lineWithNameAndTimerArrayList.get(position).getNameOfTimer());
+
+        int startSound = lineWithNameAndTimerArrayList.get(position).getSoundWhenStart();
+        if(startSound == 0)
+            holder.sound.setText("Box Bell 1");
+        if(startSound == 1)
+            holder.sound.setText("Box Bell 2");
+        if(startSound == 2)
+            holder.sound.setText("Air Horn");;
+        if(startSound == 3)
+            holder.sound.setText("Drums");;
+        if(startSound == 4)
+            holder.sound.setText("Epic");;
+        if(startSound == 5)
+            holder.sound.setText("Fare");;
+        if(startSound == 6)
+            holder.sound.setText("Gong 1");;
+        if(startSound == 7)
+            holder.sound.setText("Gong 2");;
+        if(startSound == 8)
+            holder.sound.setText("Gong 3");;
+        if(startSound == 9)
+            holder.sound.setText("Gong 4");;
+        if(startSound == 10)
+            holder.sound.setText("Lego Yoda");;
 
         String totalTime = "" + lineWithNameAndTimerArrayList.get(position).getMinutesOfTimer();
         totalTime +=":";
@@ -70,5 +95,6 @@ public class CustomAdapterForLineWithNameAndTimer extends BaseAdapter
     {
         TextView txtNameOfTimer;
         TextView actualTimerSeconds;
+        TextView sound;
     }//class ViewHolder
 }

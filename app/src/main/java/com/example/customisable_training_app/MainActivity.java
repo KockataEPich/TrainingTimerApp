@@ -29,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -188,10 +190,6 @@ public class MainActivity extends Activity
         });
 
 
-
-
-
-
         programList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
@@ -256,7 +254,7 @@ public class MainActivity extends Activity
 
     public void shakeItem(View view)
     {
-        Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+        Animation shake = AnimationUtils.loadAnimation(this, R.anim.react_on_click);
         view.startAnimation(shake);
 
     }//shakeItem
@@ -266,6 +264,10 @@ public class MainActivity extends Activity
     // It is invoked when the "+" is pressed on the main activity
     public void addNewProgram(View view)
     {
+        YoYo.with(Techniques.Tada)
+                .duration(600)
+                .playOn(view);
+
         Line programToAdd = new Line();
         programToAdd.setNameOfWorkout("Workout " + (allLines.size() + 1));
         programToAdd.setDateOfCreation(Calendar.getInstance().getTime());
@@ -418,7 +420,12 @@ public class MainActivity extends Activity
     }//OnActivityResult
 
 
-    //TODO make the bar not respond to typing
+    //TODO Make the optioons and timer setter more aesthethic
+    //TODO Increase the size of the timmer line to include the sound it gives
+    //TODO Make the adding program button fill out the app instead of waiting for it to get out
+
+
+
 
     // Method for updating the file which contains the the information about the workouts
     // and its timers.

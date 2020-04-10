@@ -2,6 +2,7 @@ package com.example.customisable_training_app;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -24,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -34,7 +38,6 @@ import java.security.cert.PKIXRevocationChecker;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 public class EditPage extends AppCompatActivity implements EditPageInformationExchangeListener {
 
@@ -54,7 +57,7 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
     boolean vibrate;
 
     FloatingActionButton menuFab, playFab, addTimerFab, optionsFab, closeFab;
-    Animation fabOpen, fabClose, rotateForward, rotateBackward, fabOpenBig;
+    Animation fabOpen, fabClose, rotateForward, rotateBackward, fabOpenBig, fabWiggle, fabDissappear;
     boolean isOpen = false;
 
     private EditPageInformationExchangeListener listener;
@@ -115,6 +118,8 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         rotateForward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
         rotateBackward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
         fabOpenBig = AnimationUtils.loadAnimation(this, R.anim.fab_open_big);
+        fabWiggle = AnimationUtils.loadAnimation(this, R.anim.fab_wiggle);
+        fabDissappear = AnimationUtils.loadAnimation(this, R.anim.dissappear);
 
         menuFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,23 +136,36 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         });
 
         playFab.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Toast.makeText(EditPage.this, "play FAB CLICKED",Toast.LENGTH_SHORT).show();
+                YoYo.with(Techniques.Tada)
+                    .duration(300)
+                    .playOn(v);
             }
         });
 
         addTimerFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YoYo.with(Techniques.Tada)
+                        .duration(300)
+                        .playOn(v);
                 addTimer();
+
             }
         });
 
         optionsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YoYo.with(Techniques.Tada)
+                        .duration(300)
+                        .playOn(v);
                 options();
+
             }
         });
 
@@ -224,16 +242,32 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
     {
         if(isOpen)
         {
+
             closeFab.startAnimation(fabClose);
+            ViewCompat.animate(closeFab)
+                    .rotation(0.0F)
+                    .withLayer()
+                    .setDuration(500L)
+                    .setInterpolator(new OvershootInterpolator(10.0F))
+                    .start();
             closeFab.setClickable(false);
 
+
+
             menuFab.startAnimation(fabOpenBig);
+            ViewCompat.animate(menuFab)
+                    .rotation(0.0F)
+                    .withLayer()
+                    .setDuration(300L)
+                    .setInterpolator(new OvershootInterpolator(10.0F))
+                    .start();
             menuFab.setClickable(true);
 
 
             playFab.startAnimation(fabClose);
             addTimerFab.startAnimation(fabClose);
             optionsFab.startAnimation(fabClose);
+
             playFab.setClickable(false);
             addTimerFab.setClickable(false);
             optionsFab.setClickable(false);
@@ -241,10 +275,27 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         }//if
         else
         {
+
             menuFab.startAnimation(fabClose);
+            ViewCompat.animate(menuFab)
+                    .rotation(45.0F)
+                    .withLayer()
+                    .setDuration(500L)
+                    .setInterpolator(new OvershootInterpolator(10.0F))
+                    .start();
+
             menuFab.setClickable(false);
 
+
             closeFab.startAnimation(fabOpenBig);
+            ViewCompat.animate(closeFab)
+                    .rotation(45.0F)
+                    .withLayer()
+                    .setDuration(300L)
+                    .setInterpolator(new OvershootInterpolator(10.0F))
+                    .start();
+
+
             closeFab.setClickable(true);
 
             playFab.startAnimation(fabOpen);

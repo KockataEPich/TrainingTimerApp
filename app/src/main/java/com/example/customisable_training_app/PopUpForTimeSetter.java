@@ -64,7 +64,7 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
 
         // Set the options buttons and title
         builder.setView(view)
-                .setTitle("Time Setter")
+                .setTitle("efg")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
                 {
                     @Override

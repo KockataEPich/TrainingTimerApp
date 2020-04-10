@@ -25,14 +25,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.68" />
+                app:layout_constraintGuide_percent="0.7" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_for_fab_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.78" />
+                app:layout_constraintGuide_percent="0.8" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline12"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.88" />
+                app:layout_constraintGuide_percent="0.9" />
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -140,9 +140,9 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline_for_fab1"
                 app:layout_constraintTop_toTopOf="@+id/guideline_for_fab_2"
 
-                app:maxImageSize="24dp"
+                app:maxImageSize="36dp"
                 app:rippleColor="#00FFFFFF"
-                app:srcCompat="@drawable/ic_close_24dp" />
+                app:srcCompat="@drawable/ic_add_black_24dp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/play_button"
