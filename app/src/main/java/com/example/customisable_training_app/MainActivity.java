@@ -17,7 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 
 
-
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -59,6 +59,7 @@ public class MainActivity extends Activity
     private InterstitialAd wholeScreenAd2;
     private AdView mAdView;
 
+    Animation fabOpen, fabClose;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -68,7 +69,7 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         //Initialise Mobile Ads
-       /* MobileAds.initialize(this, "ca-app-pub-3935469427404511~1371124907");
+        MobileAds.initialize(this, "ca-app-pub-3935469427404511~1371124907");
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -83,16 +84,6 @@ public class MainActivity extends Activity
         wholeScreenAd2 = new InterstitialAd(this);
         wholeScreenAd2.setAdUnitId("ca-app-pub-3935469427404511/7930500684");
         wholeScreenAd2.loadAd(new AdRequest.Builder().build());
-
-        wholeScreenAd2.setAdListener(new AdListener()
-        {
-            @Override
-            public void onAdClosed()
-            {
-                super.onAdClosed();
-                startActivityForResult(new Intent(MainActivity.this, CreateNewProgramPage.class), 1);
-            }//onAdClosed()
-        });
 
         mInterstitialAd.setAdListener(new AdListener()
         {
@@ -122,7 +113,7 @@ public class MainActivity extends Activity
         mAdView.loadAd(adRequest);
 
 
-     */
+
 
 
 
@@ -190,6 +181,10 @@ public class MainActivity extends Activity
         });
 
 
+        fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+
+
         programList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
@@ -200,7 +195,9 @@ public class MainActivity extends Activity
                 fullObject = (Line) o;
                 final View lineInView = view;
 
+
                 shakeItem(view);
+
 
                 AlertDialog.Builder alert =  new AlertDialog.Builder(MainActivity.this);
 
@@ -224,6 +221,7 @@ public class MainActivity extends Activity
                     }//onClick
                 });
                 alert.show();
+
 
                 return true;
             }//onItemLongClick

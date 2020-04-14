@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,6 +24,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditPageInformationExchangeListener
 {
@@ -42,12 +47,11 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
 
    private EditPageInformationExchangeListener listener;
 
-    Button button1;
-    Button button2;
-    Button button3;
-    Button button4;
-    Button button5;
-    Button button6;
+    TextView addMinButton;
+    TextView addSecondsButton;
+    TextView removeMinuteButton;
+    TextView removeSecondButton;
+    TextView setButton;
 
 
     Spinner dropdown;
@@ -57,49 +61,54 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
     {
 
         // Create the dialogue builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_pop_up_for_time_setter, null);
 
         // Set the options buttons and title
-        builder.setView(view)
-                .setTitle("efg")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-
-
-                    }//onclick
-                })
-                .setPositiveButton("Set", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        // Get the values from the view that we will pass down
-                        String selectedName = name.getText().toString();
-
-                        listener.textFromTimerEditToEditPage(selectedName, startSound, currentMinutes, currentSeconds);
-                    }//onClick
-                });
+        builder.setView(view);
 
 
 
 
-        button1 = view.findViewById(R.id.add_min_button);
-        button2 = view.findViewById(R.id.add_seconds_button);
-        button3 = view.findViewById(R.id.subtract_minute_button);
-        button4 = view.findViewById(R.id.subtract_second_button);
+
+        addMinButton = view.findViewById(R.id.add_min_button);
+        addSecondsButton = view.findViewById(R.id.add_seconds_button);
+        removeMinuteButton = view.findViewById(R.id.subtract_minute_button);
+        removeSecondButton = view.findViewById(R.id.subtract_second_button);
+        setButton = view.findViewById(R.id.set_button);
+
+        setButton.setOnClickListener(new View.OnClickListener() {
 
 
-        button1.setOnClickListener(new View.OnClickListener()
+            @Override
+            public void onClick(View v)
+            {
+                YoYo.with(Techniques.Tada)
+                        .duration(400)
+                        .playOn(v);
+
+
+                String nameOfTimer = name.getText().toString();
+                listener.textFromTimerEditToEditPage(nameOfTimer, startSound, currentMinutes, currentSeconds);
+                dismiss();
+            }
+        });
+
+        addMinButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                YoYo.with(Techniques.Tada)
+                        .duration(400)
+                        .playOn(v);
+
+                YoYo.with(Techniques.Tada)
+                        .duration(400)
+                        .playOn(minutes);
+
                 if(currentMinutes != 59)
                 {
                     currentMinutes++;
@@ -115,11 +124,20 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
             }//onClick
         });
 
-        button2.setOnClickListener(new View.OnClickListener()
+        addSecondsButton.setOnClickListener(new View.OnClickListener()
         {
            @Override
            public void onClick(View v)
            {
+
+               YoYo.with(Techniques.Tada)
+                       .duration(400)
+                       .playOn(v);
+
+               YoYo.with(Techniques.Tada)
+                       .duration(400)
+                       .playOn(seconds);
+
             if(currentSeconds != 59)
             {
                 currentSeconds++;
@@ -130,36 +148,53 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
             }//if
             else if(!atTheEnd)
             {
-                button1.callOnClick();
+                addMinButton.callOnClick();
                 currentSeconds = 0;
                 seconds.setText("0" + currentSeconds);
             }//if
            }//onClick
        });
 
-        button3.setOnClickListener(new View.OnClickListener()
+        removeMinuteButton.setOnClickListener(new View.OnClickListener()
         {
         @Override
         public void onClick(View v)
         {
+
+            YoYo.with(Techniques.Tada)
+                    .duration(400)
+                    .playOn(v);
+
+            YoYo.with(Techniques.Tada)
+                    .duration(400)
+                    .playOn(minutes);
+
             if(currentMinutes != 0)
-        {
+            {
             currentMinutes--;
             if(currentMinutes < 10)
                 minutes.setText("0" + currentMinutes + ":");
             else
                 minutes.setText("" + currentMinutes + ":");
-        }
-        else
-            atTheBeginning = true;
+            }
+            else
+               atTheBeginning = true;
         }//onClick
        });
 
-        button4.setOnClickListener(new View.OnClickListener()
+        removeSecondButton.setOnClickListener(new View.OnClickListener()
         {
         @Override
         public void onClick(View v)
         {
+            YoYo.with(Techniques.Tada)
+                    .duration(400)
+                    .playOn(v);
+
+            YoYo.with(Techniques.Tada)
+                    .duration(400)
+                    .playOn(seconds);
+
             if(currentSeconds != 0)
             {
                 currentSeconds--;
@@ -170,11 +205,11 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
             }//if
             else if (!atTheEnd)
             {
-                button3.callOnClick();
+                removeMinuteButton.callOnClick();
                 currentSeconds = 59;
                 seconds.setText("" + currentSeconds);
             }
-          }//onClick
+        }//onClick
         });
 
 
@@ -331,14 +366,19 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
     public void setDropdown(View view)
     {
         dropdown = view.findViewById(R.id.spinner);
-        String[] items = new String[]{"Box Bell 1", "Box Bell 2", "Air Horn", "Drums", "Epic", "Fare", "Gong 1", "Gong 2", "Gong 3", "Gong 4", "Lego Yoda", "          "};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+        String[] items = new String[]{"Box Bell 1", "Box Bell 2", "Air Horn", "Drums", "Epic", "Fare", "Gong 1", "Gong 2", "Gong 3", "Gong 4"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(R.layout.spinner_background);
         dropdown.setAdapter(adapter);
 
         dropdown.setSelection(startSound);
+
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+
                 if(position == 0)
                     startSound = 0;
                 if(position == 1)
@@ -359,8 +399,6 @@ public class PopUpForTimeSetter extends AppCompatDialogFragment implements EditP
                     startSound = 8;
                 if(position == 9)
                     startSound = 9;
-                if(position == 10)
-                    startSound = 10;
             }
 
             @Override

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -49,12 +50,14 @@ public class CustomAdapter extends BaseAdapter
 
 
 
+
             convertView.setTag(holder);
         }
         else
         {
             holder = (ViewHolder) convertView.getTag();
         }
+
 
         holder.txtNameOfWorkout.setText(lineArrayList.get(position).getNameOfWorkout());
 
@@ -68,6 +71,7 @@ public class CustomAdapter extends BaseAdapter
     {
         TextView txtNameOfWorkout;
         TextView dateOfCreation;
+
 
 
     }//class ViewHolder

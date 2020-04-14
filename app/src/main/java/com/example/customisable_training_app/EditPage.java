@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,7 +58,7 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
     boolean vibrate;
 
     FloatingActionButton menuFab, playFab, addTimerFab, optionsFab, closeFab;
-    Animation fabOpen, fabClose, rotateForward, rotateBackward, fabOpenBig, fabWiggle, fabDissappear;
+    Animation fabOpen, fabClose, rotateForward, rotateBackward, fabOpenBig, fabWiggle, fabDissappear, reactOnClick;
     boolean isOpen = false;
 
     private EditPageInformationExchangeListener listener;
@@ -120,6 +121,7 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         fabOpenBig = AnimationUtils.loadAnimation(this, R.anim.fab_open_big);
         fabWiggle = AnimationUtils.loadAnimation(this, R.anim.fab_wiggle);
         fabDissappear = AnimationUtils.loadAnimation(this, R.anim.dissappear);
+        reactOnClick = AnimationUtils.loadAnimation(this, R.anim.react_on_click);
 
         menuFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,10 +142,10 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(EditPage.this, "play FAB CLICKED",Toast.LENGTH_SHORT).show();
                 YoYo.with(Techniques.Tada)
                     .duration(300)
                     .playOn(v);
+                startProgram();
             }
         });
 
@@ -169,40 +171,6 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
             }
         });
 
-
-
-
-        //numberOfRounds = findViewById(R.id.number_of_rounds);
-        //numberOfRounds.setText("" + intent.getIntExtra("numberOfRounds", 0));
-
-      /*  numberOfRounds.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus)
-            {
-                if(!hasFocus)
-                {
-                    String strEnteredVal = numberOfRounds.getText().toString();
-                    if(strEnteredVal.equals("") )
-                    {
-                        numberOfRounds.setText("" + 1);
-                        Toast.makeText(EditPage.this, "You need to have at least 1 round", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(Integer.parseInt(strEnteredVal) == 0)
-                    {
-                        numberOfRounds.setText("" + 1);
-                        Toast.makeText(EditPage.this, "You need to have at least 1 round", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-
-            }
-        });
-        */
-
-
-
-
-
         allLines = getAllLines();
         listOfTimers = findViewById(R.id.list_of_timers);
         adapter = new CustomAdapterForLineWithNameAndTimer(this, allLines);
@@ -214,12 +182,34 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
             public void onItemClick(AdapterView<?> a, View v, int position, long id)
             {
 
+                v.startAnimation(reactOnClick);
                 positionInList = position;
                 o = listOfTimers.getItemAtPosition(position);
                 fullObject = (LineWithNameAndTimer) o;
 
+
+
                 timeSetter(fullObject);
             }
+        });
+
+        listOfTimers.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                positionInList = position;
+                o = listOfTimers.getItemAtPosition(position);
+                fullObject = (LineWithNameAndTimer) o;
+                View lineView = view;
+                lineView.startAnimation(reactOnClick);
+
+                deleteProgram(lineView, fullObject);
+
+
+
+                return true;
+            }//onItemLongClick
         });
 
 
@@ -379,20 +369,18 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
 
 
 
-    public void deleteProgram(View view)
+    public void deleteProgram(final View view, final LineWithNameAndTimer theLineToDelete)
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Delete entry");
-        alert.setMessage("Are you sure you want to delete this program?");
-        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+        alert.setTitle("Delete Timer");
+        alert.setMessage("Are you sure you want to delete " + "\"" + theLineToDelete.getNameOfTimer() + "\"" + " timer");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                Intent resultIntent = new Intent();
-                setResult(8, resultIntent);
-                finish();
+                removeItem(view, theLineToDelete);
             }
         });
 
@@ -408,8 +396,26 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
 
     }//deleteProgram
 
+    public void removeItem(View theView, final LineWithNameAndTimer lineToRemove)
+    {
+        final Animation animation = AnimationUtils.loadAnimation(EditPage.this, android.R.anim.slide_out_right);
+        theView.startAnimation(animation);
+        Handler handle = new Handler();
+        handle.postDelayed(new Runnable()
+        {
+            @Override
+            public void run() {
+                allLines.remove(lineToRemove);
+                adapter.notifyDataSetChanged();
+                EditPage.this.updateSharedPreference();
+                animation.cancel();
+            }
+        },400);
 
-    public void startProgram(View view)
+    }//removeItem
+
+
+    public void startProgram()
     {
         if (allLines.size() == 0)
         {
@@ -421,6 +427,9 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
             Intent intent = new Intent(EditPage.this, CountDownRunning.class);
             intent.putExtra("sizeOfList", allLines.size());
             intent.putExtra("numberOfRounds", numberOfRounds);
+            intent.putExtra("TTS", tts);
+            intent.putExtra("continue", continueWhenLocked);
+            intent.putExtra("vibrate", vibrate);
 
             for (int i = 0; i < allLines.size(); i++)
             {
@@ -465,6 +474,8 @@ public class EditPage extends AppCompatActivity implements EditPageInformationEx
         allLines.add(lineToAdd);
         adapter.notifyDataSetChanged();
         updateSharedPreference();
+        fullObject = lineToAdd;
+        timeSetter(fullObject);
     }//addTimer
 
 

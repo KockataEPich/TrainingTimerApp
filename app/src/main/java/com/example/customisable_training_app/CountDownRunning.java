@@ -1,17 +1,28 @@
 package com.example.customisable_training_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import android.os.Vibrator;
+import com.daimajia.androidanimations.library.specials.in.LandingAnimator;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CountDownRunning extends AppCompatActivity
 {
@@ -19,8 +30,11 @@ public class CountDownRunning extends AppCompatActivity
     private TextView nameOfTimer;
     private TextView countdownText;
     private TextView displayedRounds;
-    private RelativeLayout countdownLayout;
+    private ConstraintLayout countdownLayout;
     private TextView pauseTextView;
+    private TextView next_name;
+    private LinearLayout  nextLayout;
+    private Vibrator v;
 
     private long timeLeftMiliseconds;
     private boolean isRunning = true;
@@ -30,8 +44,19 @@ public class CountDownRunning extends AppCompatActivity
     private MediaPlayer currentSoundWhenStart;
 
     int position = 0;
+    int nextPosition = 1;
     int currentSound;
     int numberOfRounds;
+
+    int currentRound = 1;
+
+    boolean tts;
+    boolean canUseTTS = false;
+
+    boolean continueWhenLocked;
+    boolean vibrate;
+
+    private TextToSpeech mTTS;
 
 
     private ArrayList<LineWithNameAndTimer> allLines;
@@ -47,10 +72,45 @@ public class CountDownRunning extends AppCompatActivity
         tickForLast3Seconds = MediaPlayer.create(this, R.raw.tick_for_last_seconds);
         allLines = getAllLines();
 
-        countdownLayout = (RelativeLayout) findViewById(R.id.countdown_text);
+        countdownLayout = findViewById(R.id.countdown_text);
         nameOfTimer = findViewById(R.id.timer_name);
         countdownText = findViewById(R.id.time_left_on_timer);
         pauseTextView = findViewById(R.id.textView9);
+        next_name = findViewById(R.id.next_timer_name);
+        nextLayout = findViewById(R.id.important_layout);
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status)
+            {
+                if(status == TextToSpeech.SUCCESS)
+                {
+                    int result = mTTS.setLanguage(Locale.US);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
+                    {
+                        Log.e("TTS", "Language not supported");
+                    }
+                    else
+                    {
+                        if(tts)
+                           mTTS.speak(allLines.get(position).getNameOfTimer(), TextToSpeech.QUEUE_FLUSH, null);
+                    }
+                }
+                else
+                {
+                    Log.e("TTS", "Initialisation failed");
+                }
+            }
+        });
+        mTTS.setPitch(1);
+        mTTS.setSpeechRate(1);
+        mTTS.speak("keeek", TextToSpeech.QUEUE_FLUSH, null);
+
+
+
+
 
         timeLeftMiliseconds = (allLines.get(position).getMinutesOfTimer() * 60 + allLines.get(position).getSecondsOfTimer()) * 1000;
 
@@ -71,6 +131,20 @@ public class CountDownRunning extends AppCompatActivity
     }
 
 
+    private void speak(String theLineToSay)
+    {
+        mTTS.speak(theLineToSay, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mTTS != null)
+        {
+            mTTS.stop();
+            mTTS.shutdown();
+        }
+        super.onDestroy();
+    }
 
     public void startStop()
     {
@@ -88,7 +162,14 @@ public class CountDownRunning extends AppCompatActivity
     public void actualStart()
     {
         returnCurrentSound(allLines.get(position).getSoundWhenStart());
-        currentSoundWhenStart.start();
+
+        if(!tts)
+            currentSoundWhenStart.start();
+
+        if(vibrate)
+        {
+            v.vibrate(600);
+        }//if
         startTimer();
     }
 
@@ -123,8 +204,22 @@ public class CountDownRunning extends AppCompatActivity
     public void startTimer()
     {
 
-        displayedRounds.setText("" + (numberOfRounds - 1));
+        displayedRounds.setText("round   " + currentRound + "/" + numberOfRounds);
+
         nameOfTimer.setText(allLines.get(position).getNameOfTimer());
+
+        if(nextPosition < allLines.size())
+         next_name.setText(allLines.get(nextPosition).getNameOfTimer());
+        else if (currentRound < numberOfRounds)
+        {
+            nextPosition = 0;
+            next_name.setText(allLines.get(nextPosition).getNameOfTimer());
+        }//if
+        else
+        {
+            next_name.setText("End of workout");
+        }//else
+
         timer = new CountDownTimer(timeLeftMiliseconds, 1000)
         {
             @Override
@@ -143,19 +238,59 @@ public class CountDownRunning extends AppCompatActivity
                 if(position < allLines.size() - 1)
                 {
                     position++;
+                    nextPosition++;
                     returnCurrentSound(allLines.get(position).getSoundWhenStart());
                     timeLeftMiliseconds = (allLines.get(position).getMinutesOfTimer() * 60 + allLines.get(position).getSecondsOfTimer()) * 1000;
-                    currentSoundWhenStart.start();
+
+                    if(tts)
+                        speak(allLines.get(position).getNameOfTimer());
+                    else
+                        currentSoundWhenStart.start();
+
+                    YoYo.with(Techniques.Landing)
+                            .duration(200)
+                            .playOn(nameOfTimer);
+
+                    YoYo.with(Techniques.Landing)
+                            .duration(200)
+                            .playOn(next_name);
+
+                    if(vibrate)
+                    {
+                        v.vibrate(600);
+                    }//if
+
+
                     timer.cancel();
                     startTimer();
                 }
-                else if(numberOfRounds > 1)
+                else if(currentRound < numberOfRounds)
                     {
-                        numberOfRounds--;
+                        currentRound++;
+
+                        YoYo.with(Techniques.Landing)
+                                .duration(200)
+                                .playOn(nameOfTimer);
+
+                        YoYo.with(Techniques.Landing)
+                                .duration(200)
+                                .playOn(next_name);
+
+                        if(vibrate)
+                        {
+                            v.vibrate(600);
+                        }//if
+
                         position = 0;
+                        nextPosition = 1;
                         timeLeftMiliseconds = (allLines.get(position).getMinutesOfTimer() * 60 + allLines.get(position).getSecondsOfTimer()) * 1000;
                          returnCurrentSound(allLines.get(position).getSoundWhenStart());
-                        currentSoundWhenStart.start();
+
+                        if(tts)
+                            speak(allLines.get(position).getNameOfTimer());
+                        else
+                            currentSoundWhenStart.start();
+
                         startTimer();
                     }
                 else
@@ -196,6 +331,12 @@ public class CountDownRunning extends AppCompatActivity
         ArrayList<LineWithNameAndTimer> getAllLines = new ArrayList<LineWithNameAndTimer>();
         Intent intent = getIntent();
         numberOfRounds = intent.getIntExtra("numberOfRounds", 1);
+
+        tts = intent.getBooleanExtra("TTS", false);
+        continueWhenLocked = intent.getBooleanExtra("continue", false);
+        vibrate = intent.getBooleanExtra("vibrate", false);
+
+
         for(int i = 0; i < intent.getIntExtra("sizeOfList", 0); i++)
         {
             LineWithNameAndTimer lineToAdd = new LineWithNameAndTimer();
@@ -213,7 +354,7 @@ public class CountDownRunning extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if(isRunning)
+        if(isRunning && !continueWhenLocked)
         {
             stopTimer();
         }

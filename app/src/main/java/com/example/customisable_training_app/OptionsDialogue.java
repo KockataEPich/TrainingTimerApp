@@ -16,9 +16,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.zip.Inflater;
 
@@ -31,8 +35,10 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
     private CheckBox vibrate;
     private EditPageInformationExchangeListener listener;
 
-    private Button addRoundButton;
-    private Button subtractRoundButton;
+    private TextView addRoundButton;
+    private TextView subtractRoundButton;
+
+    private TextView setButton;
 
     public int currentRounds;
     public boolean boolTTS;
@@ -51,31 +57,7 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
         View view = inflater.inflate(R.layout.options_menu, null);
 
         // Set the options buttons and title
-        builder.setView(view)
-                .setTitle("Options")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-
-
-                    }//onclick
-                })
-                .setPositiveButton("Set", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        // Get the values from the view that we will pass down
-                        int roundsNumber = Integer.parseInt(rounds.getText().toString());
-                        boolean isTTS = tts.isChecked();
-                        boolean isContinueWhenLocked = continueWhenLocked.isChecked();
-                        boolean isVibrate = vibrate.isChecked();
-                        listener.textFromOptionsToEditPage(roundsNumber, isTTS, isContinueWhenLocked, isVibrate);
-                    }//onClick
-                });
-
+        builder.setView(view);
 
       rounds = view.findViewById(R.id.view_of_rounds);
       tts = view.findViewById(R.id.checkbox_TTS);
@@ -83,16 +65,48 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
       vibrate = view.findViewById(R.id.checkbox_Vibrate);
       addRoundButton = view.findViewById(R.id.add_round_button);
       subtractRoundButton = view.findViewById(R.id.subtract_round_button);
+      setButton = view.findViewById(R.id.set_button);
 
 
 
 
+      setButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v)
+          {
+              // Get the values from the view that we will pass down
+              String roundsSelected = rounds.getText().toString();
+              int roundsNumber;
+
+
+              if(roundsSelected.equals(""))
+                  roundsNumber = 1;
+              else
+                  roundsNumber = Integer.parseInt(roundsSelected);
+
+
+                  boolean isTTS = tts.isChecked();
+                  boolean isContinueWhenLocked = continueWhenLocked.isChecked();
+                  boolean isVibrate = vibrate.isChecked();
+                  listener.textFromOptionsToEditPage(roundsNumber, isTTS, isContinueWhenLocked, isVibrate);
+                  dismiss();
+
+          }
+      });
 
       addRoundButton.setOnClickListener(new View.OnClickListener()
       {
           @Override
           public void onClick(View v)
           {
+              YoYo.with(Techniques.Tada)
+                      .duration(300)
+                      .playOn(v);
+
+              YoYo.with(Techniques.Tada)
+                      .duration(300)
+                      .playOn(rounds);
+
               currentRounds++;
               if(currentRounds <= 99)
               {
@@ -114,6 +128,14 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
            @Override
            public void onClick(View v)
            {
+               YoYo.with(Techniques.Tada)
+                       .duration(300)
+                       .playOn(v);
+
+               YoYo.with(Techniques.Tada)
+                       .duration(300)
+                       .playOn(rounds);
+
                currentRounds--;
                if(currentRounds >= 0)
                {
@@ -130,6 +152,12 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
        tts.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+
+               YoYo.with(Techniques.Tada)
+                       .duration(300)
+                       .playOn(v);
+
+
                boolean checked = ((CheckBox) v).isChecked();
                // Check which checkbox was clicked
                if (checked)
@@ -146,6 +174,11 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
        continueWhenLocked.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+
+               YoYo.with(Techniques.Tada)
+                       .duration(300)
+                       .playOn(v);
+
                boolean checked = ((CheckBox) v).isChecked();
                // Check which checkbox was clicked
                if (checked)
@@ -164,6 +197,10 @@ public class OptionsDialogue extends AppCompatDialogFragment implements EditPage
             @Override
             public void onClick(View v)
             {
+                YoYo.with(Techniques.Tada)
+                        .duration(300)
+                        .playOn(v);
+
                 boolean checked = ((CheckBox) v).isChecked();
                 // Check which checkbox was clicked
                 if (checked)

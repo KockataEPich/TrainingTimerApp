@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@drawable/rsz_actual_background"
+            android:orientation="horizontal">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_fab_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.66" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_fab_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.76" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.64" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_tob_bar_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_top_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_fab1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.8" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_for_fab_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.87" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="0.0dp"
+                android:layout_height="55dp"
+                android:background="@drawable/resized_light_gray"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@id/guideline_for_tob_bar_end"
+                app:layout_constraintStart_toStartOf="@id/guideline_for_top_bar"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/choose_name_of_program"
+                    style="?android:attr/listSeparatorTextViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:inputType="textPersonName"
+                    android:text="Name"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/textSizeEditText" />
+
+            </LinearLayout>
+
+
+            <ListView
+                android:id="@+id/list_of_timers"
+                android:layout_width="0.0dp"
+                android:layout_height="0.0dp"
+                android:background="#00375EA3"
+                android:clipToPadding="false"
+                android:dividerHeight="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+            </ListView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/edit_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_for_fab1"
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_fab_2"
+                app:maxImageSize="24dp"
+
+                app:rippleColor="#00FFFFFF"
+                app:srcCompat="@drawable/ic_menu_24dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/ex_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_for_fab1"
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_fab_2"
+
+                app:maxImageSize="36dp"
+                app:rippleColor="#00FFFFFF"
+                app:srcCompat="@drawable/ic_add_black_24dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/play_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:onClick="addTimer"
+                android:scaleType="center"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_fab_2"
+                app:maxImageSize="24dp"
+                app:rippleColor="#00FFFFFF"
+
+                app:srcCompat="@drawable/ic_play_arrow_24dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:scaleType="center"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/guideline_for_fab1"
+
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_fab_3"
+                app:maxImageSize="24dp"
+                app:rippleColor="#00FFFFFF"
+                app:srcCompat="@drawable/ic_add_black_24dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/options_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:scaleType="center"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/guideline_for_fab1"
+
+                app:layout_constraintTop_toTopOf="@+id/guideline_for_fab_4"
+                app:maxImageSize="24dp"
+                app:rippleColor="#00FFFFFF"
+                app:srcCompat="@drawable/ic_more_horiz_24dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/ad_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
